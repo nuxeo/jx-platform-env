@@ -1,0 +1,8 @@
+name: platform-env
+version: 0.0.1-SNAPSHOT
+description: Jenkins X Environment for the platform team
+maintainers:
+  - name: Platform Team
+sources:
+- https://github.com/nuxeo/jx-platform-env
+- https://github.com/jenkins-x/jenkins-x-platform
