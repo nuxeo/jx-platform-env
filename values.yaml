@@ -1,7 +1,7 @@
 jenkins:
   Master:
     Image: $DOCKER_REGISTRY/nuxeo/platform-jenkinsx
-    ImageTag: 0.0.0
+    ImageTag: 0.0.1
   Servers:
     Global:
       EnvVars:
