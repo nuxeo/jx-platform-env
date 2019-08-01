@@ -78,7 +78,7 @@ pipeline {
             if (jenkinsPod) {
               // delete jenkins pod to recreate it
               sh "kubectl delete pod ${jenkinsPod} --ignore-not-found=true"
-              echo "Deleted pod ${${jenkinsPod}} to recreate it."
+              echo "Deleted pod ${jenkinsPod} to recreate it."
             } else {
               echo "No jenkins pod found, won't recreate it."
             }
