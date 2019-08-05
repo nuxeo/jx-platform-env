@@ -132,3 +132,12 @@ jenkins:
 nexus:
   persistence:
     size: 100Gi
+PipelineSecrets:
+  DockerConfig: |-
+    {
+      "auths": {
+        "packages.nuxeo.com:5000": {
+          "auth": "$PUBLIC_DOCKER_REGISTRY_AUTH"
+        }
+      }
+    }

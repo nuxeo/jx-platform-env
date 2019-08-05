@@ -52,23 +52,35 @@ pipeline {
         setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X platform', 'PENDING')
         container('jx-base') {
           echo "Upgrade Jenkins X platform using jenkins image tag ${getJenkinsImageTag()}"
-          sh """
-            # initialize Helm without installing Tiller
-            helm init --client-only --service-account ${SERVICE_ACCOUNT}
+          script {
+            // get the existing docker registry auth
+            def dockerRegistryAuth = sh(
+              script: """
+                kubectl get secret jenkins-docker-cfg -o go-template=\$'{{index .data "config.json"}}' | base64 --decode | sed -n '/"auth"/p' | awk -F'"' '{print \$4}'
+              """,
+              returnStdout: true
+            ).trim();
+            withEnv(["PUBLIC_DOCKER_REGISTRY_AUTH=${dockerRegistryAuth}"]) {
+              sh """
+              # initialize Helm without installing Tiller
+              helm init --client-only --service-account ${SERVICE_ACCOUNT}
 
-            # add local chart repository
-            helm repo add jenkins-x http://chartmuseum.jenkins-x.io
+              # add local chart repository
+              helm repo add jenkins-x http://chartmuseum.jenkins-x.io
 
-            # replace env vars in values.yaml: DOCKER_REGISTRY
-            envsubst < values.yaml > myvalues.yaml
+              # replace env vars in values.yaml: DOCKER_REGISTRY, PUBLIC_DOCKER_REGISTRY_AUTH
+              envsubst < values.yaml > myvalues.yaml
 
-            # upgrade Jenkins X platform
-            jx upgrade platform --namespace=platform \
-              --local-cloud-environment \
-              --always-upgrade \
-              --cleanup-temp-files=true \
-              --batch-mode
-          """
+              # upgrade Jenkins X platform
+              jx upgrade platform --namespace=platform \
+                --local-cloud-environment \
+                --always-upgrade \
+                --cleanup-temp-files=true \
+                --batch-mode
+            """
+            }
+          }
+
           script {
             // get jenkins pod
             def jenkinsPod = sh(
