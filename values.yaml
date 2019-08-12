@@ -120,7 +120,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Rpm:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-nuxeo-rpm:latest
+            Image: $DOCKER_REGISTRY/nuxeo/builder-rpm:latest
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "256Mi"
