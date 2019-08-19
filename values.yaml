@@ -2,6 +2,7 @@ jenkins:
   Master:
     Image: $DOCKER_REGISTRY/nuxeo/platform-jenkinsx
     ImageTag: 0.0.2
+    OverwriteConfig: true
   Servers:
     Global:
       EnvVars:
