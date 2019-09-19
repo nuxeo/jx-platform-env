@@ -60,7 +60,9 @@ pipeline {
               """,
               returnStdout: true
             ).trim();
-            withEnv(["PUBLIC_DOCKER_REGISTRY_AUTH=${dockerRegistryAuth}"]) {
+            // get the existing nexus password
+            def nexusPassword = sh(script: 'kubectl get secret -o=jsonpath=\'{.data.password}\' nexus | base64 --decode', returnStdout: true)
+            withEnv(["PUBLIC_DOCKER_REGISTRY_AUTH=${dockerRegistryAuth}", "NEXUS_PASSWORD=${nexusPassword}"]) {
               sh """
               # initialize Helm without installing Tiller
               helm init --client-only --service-account ${SERVICE_ACCOUNT}
