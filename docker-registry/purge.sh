@@ -16,9 +16,16 @@ function used () {
   execDockerRegistry "df" | grep '/var/lib/registry' | awk '{print$3}'
 }
 
+pattern=$([ -z "$1" ] && echo -n "PR" || echo -n "$1")
+deleteCacheImages=$([ "$2" = "true" ] && echo -n "true" || echo -n "false")
+
 echo '==================================='
 echo '- Purge internal Docker registry! -'
 echo '==================================='
+echo
+echo '  Parameters:'
+echo "    - pattern: ${pattern}"
+echo "    - delete cache images: ${deleteCacheImages}"
 echo
 
 echo 'Space before cleanup:'
@@ -34,12 +41,16 @@ $images
 EOF
 echo
 
-pattern=PR
 for image in $images
 do
   echo "Handle image named $image"
-  tags=$(curl --silent http://$dockerRegistryIP:5000/v2/$image/tags/list  | jq -r '.tags | .[]?' | grep $pattern || true)
-  echo "Tags matching pattern '$pattern':"
+  imagePattern=$pattern
+  if [ "${deleteCacheImages}" = "true" -a "${image%/cache}/cache" = "${image}" ]; then
+    # remove all tags pour cache images
+    imagePattern=''
+  fi
+  tags=$(curl --silent http://$dockerRegistryIP:5000/v2/$image/tags/list  | jq -r '.tags | .[]?' | grep "$imagePattern" || true)
+  echo "Tags matching pattern '$imagePattern':"
   cat << EOF
 $tags
 EOF

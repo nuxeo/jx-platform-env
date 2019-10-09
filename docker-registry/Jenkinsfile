@@ -26,11 +26,15 @@ pipeline {
   agent {
     label 'jenkins-jx-base'
   }
+  parameters {
+    string(name: 'TAG_PATTERN', defaultValue: 'PR', description: 'Tag to delete pattern')
+    booleanParam(name: 'DELETE_CACHE_IMAGES', defaultValue: false, description: 'Whether or not the purge should delete cache images')
+  }
   stages {
     stage('Purge Docker registry') {
       steps {
         container('jx-base') {
-          sh './docker-registry/purge.sh'
+          sh "./docker-registry/purge.sh \"${params.TAG_PATTERN}\" \"${params.DELETE_CACHE_IMAGES}\""
         }
       }
     }
