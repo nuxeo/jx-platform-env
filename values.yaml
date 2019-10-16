@@ -5,7 +5,7 @@ jenkins:
   Servers:
     Global:
       EnvVars:
-        PUBLIC_DOCKER_REGISTRY: packages.nuxeo.com:5000
+        PUBLIC_DOCKER_REGISTRY: docker.packages.nuxeo.com
         YUM_REGISTRY: http://nexus.platform/repository/yum-registry/
   Agent:
     PodTemplates:
@@ -178,7 +178,7 @@ PipelineSecrets:
   DockerConfig: |-
     {
       "auths": {
-        "packages.nuxeo.com:5000": {
+        "docker.packages.nuxeo.com": {
           "auth": "$PUBLIC_DOCKER_REGISTRY_AUTH"
         }
       }
