@@ -5,6 +5,8 @@ jenkins:
   Servers:
     Global:
       EnvVars:
+        ARENDER_DOCKER_REGISTRY: docker-arender.packages.nuxeo.com
+        PRIVATE_DOCKER_REGISTRY: docker-private.packages.nuxeo.com
         PUBLIC_DOCKER_REGISTRY: docker.packages.nuxeo.com
         YUM_REGISTRY: http://nexus.platform/repository/yum-registry/
   Agent:
@@ -176,13 +178,7 @@ nexus:
     size: 100Gi
 PipelineSecrets:
   DockerConfig: |-
-    {
-      "auths": {
-        "docker.packages.nuxeo.com": {
-          "auth": "$PUBLIC_DOCKER_REGISTRY_AUTH"
-        }
-      }
-    }
+    $DOCKER_REGISTRY_CONFIG
 
   MavenSettingsXML: |-
     <settings>

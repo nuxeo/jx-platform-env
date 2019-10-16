@@ -54,15 +54,10 @@ pipeline {
           echo "Upgrade Jenkins X platform using jenkins image tag ${getJenkinsImageTag()}"
           script {
             // get the existing docker registry auth
-            def dockerRegistryAuth = sh(
-              script: """
-                kubectl get secret jenkins-docker-cfg -o go-template=\$'{{index .data "config.json"}}' | base64 --decode | sed -n '/"auth"/p' | awk -F'"' '{print \$4}'
-              """,
-              returnStdout: true
-            ).trim();
+            def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
             // get the existing nexus password
             def nexusPassword = sh(script: 'kubectl get secret -o=jsonpath=\'{.data.password}\' nexus | base64 --decode', returnStdout: true)
-            withEnv(["PUBLIC_DOCKER_REGISTRY_AUTH=${dockerRegistryAuth}", "NEXUS_PASSWORD=${nexusPassword}"]) {
+            withEnv(["DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}", "NEXUS_PASSWORD=${nexusPassword}"]) {
               sh """
               # initialize Helm without installing Tiller
               helm init --client-only --service-account ${SERVICE_ACCOUNT}
@@ -70,7 +65,7 @@ pipeline {
               # add local chart repository
               helm repo add jenkins-x http://chartmuseum.jenkins-x.io
 
-              # replace env vars in values.yaml: DOCKER_REGISTRY, PUBLIC_DOCKER_REGISTRY_AUTH
+              # replace env vars in values.yaml: DOCKER_REGISTRY, DOCKER_REGISTRY_CONFIG
               envsubst < values.yaml > myvalues.yaml
 
               # upgrade Jenkins X platform
