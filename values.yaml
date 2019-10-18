@@ -173,6 +173,9 @@ jenkins:
             Command: "/bin/sh -c"
             Args: "cat"
             Tty: true
+docker-registry:
+  persistence:
+    size: 300Gi
 nexus:
   persistence:
     size: 100Gi
