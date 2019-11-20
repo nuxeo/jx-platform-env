@@ -57,28 +57,26 @@ pipeline {
             def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
             // get the existing nexus password
             def nexusPassword = sh(script: 'kubectl get secret -o=jsonpath=\'{.data.password}\' nexus | base64 --decode', returnStdout: true)
+            // upgrade Jenkins platform
             withEnv(["DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}", "NEXUS_PASSWORD=${nexusPassword}"]) {
               sh """
-              # initialize Helm without installing Tiller
-              helm init --client-only --service-account ${SERVICE_ACCOUNT}
+                # initialize Helm without installing Tiller
+                helm init --client-only --service-account ${SERVICE_ACCOUNT}
 
-              # add local chart repository
-              helm repo add jenkins-x http://chartmuseum.jenkins-x.io
+                # add local chart repository
+                helm repo add jenkins-x http://chartmuseum.jenkins-x.io
 
-              # replace env vars in values.yaml: DOCKER_REGISTRY, DOCKER_REGISTRY_CONFIG
-              envsubst < values.yaml > myvalues.yaml
+                # replace env vars in values.yaml: DOCKER_REGISTRY, DOCKER_REGISTRY_CONFIG
+                envsubst < values.yaml > myvalues.yaml
 
-              # upgrade Jenkins X platform
-              jx upgrade platform --namespace=platform \
-                --local-cloud-environment \
-                --always-upgrade \
-                --cleanup-temp-files=true \
-                --batch-mode
-            """
+                # upgrade Jenkins X platform
+                jx upgrade platform --namespace=platform \
+                  --local-cloud-environment \
+                  --always-upgrade \
+                  --cleanup-temp-files=true \
+                  --batch-mode
+              """
             }
-          }
-
-          script {
             // get jenkins pod
             def jenkinsPod = sh(
               script: "kubectl get pod -l app=jenkins -o jsonpath='{..metadata.name}'",
