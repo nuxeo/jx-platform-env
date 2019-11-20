@@ -7,7 +7,7 @@ expose:
 jenkins:
   Master:
     Image: $DOCKER_REGISTRY/nuxeo/platform-jenkinsx
-    ImageTag: 0.0.6
+    ImageTag: 0.0.7
   Persistence:
     volumes:
       - name: jenkins-secrets
