@@ -75,19 +75,14 @@ pipeline {
                   --always-upgrade \
                   --cleanup-temp-files=true \
                   --batch-mode
+
+                # log jenkins deployment image
+                kubectl get deployments.apps jenkins -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'
+
+                # restart Jenkins pod
+                kubectl scale deployment jenkins --replicas 0
+                kubectl scale deployment jenkins --replicas 1
               """
-            }
-            // get jenkins pod
-            def jenkinsPod = sh(
-              script: "kubectl get pod -l app=jenkins -o jsonpath='{..metadata.name}'",
-              returnStdout: true
-            ).trim()
-            if (jenkinsPod) {
-              // delete jenkins pod to recreate it
-              sh "kubectl delete pod ${jenkinsPod} --ignore-not-found=true"
-              echo "Deleted pod ${jenkinsPod} to recreate it."
-            } else {
-              echo "No jenkins pod found, won't recreate it."
             }
           }
         }
