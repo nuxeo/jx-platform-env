@@ -1,3 +1,9 @@
+expose:
+  config:
+    domain: dev.nuxeo.com
+    exposer: Ingress
+    http: true
+    tlsacme: false
 jenkins:
   Master:
     Image: $DOCKER_REGISTRY/nuxeo/platform-jenkinsx
