@@ -3,7 +3,9 @@ expose:
     domain: dev.nuxeo.com
     exposer: Ingress
     http: true
-    tlsacme: false
+    tlsacme: true
+    tlsSecretName: platform-tls
+    urltemplate: '"{{.Service}}.{{.Namespace}}.{{.Domain}}"'
 jenkins:
   Master:
     Image: $DOCKER_REGISTRY/nuxeo/platform-jenkinsx
