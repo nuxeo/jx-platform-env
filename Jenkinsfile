@@ -87,6 +87,13 @@ pipeline {
                   --always-upgrade \
                   --cleanup-temp-files=true \
                   --batch-mode
+
+                # log jenkins deployment image
+                kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'
+
+                # restart Jenkins pod
+                kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
+                kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 1
               """
             }
           }
