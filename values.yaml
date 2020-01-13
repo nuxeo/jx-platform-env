@@ -194,6 +194,12 @@ docker-registry:
   persistence:
     size: 300Gi
 nexus:
+  image:
+    repository: jenkins-x-docker-registry.admin:5000/nuxeo/nexus3/team
+    tag: 0.0.0-PR-27-2
+  env:
+    INSTALL4J_ADD_VM_PARAMS: -Xms4G -Xmx4G -XX:MaxDirectMemorySize=2G
+    ulimit: nofile=65536:65536
   persistence:
     size: 300Gi
 PipelineSecrets:
