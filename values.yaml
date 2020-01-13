@@ -4,11 +4,11 @@ expose:
     exposer: Ingress
     http: true
     tlsacme: true
-    tlsSecretName: platform-tls
+    tlsSecretName: $NAMESPACE-tls
     urltemplate: '"{{.Service}}.{{.Namespace}}.{{.Domain}}"'
 jenkins:
   Master:
-    Image: $DOCKER_REGISTRY/nuxeo/platform-jenkinsx
+    Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
     ImageTag: 0.0.11
   Persistence:
     volumes:
