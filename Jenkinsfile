@@ -39,26 +39,35 @@ String getJenkinsImageTag() {
   return sh(returnStdout: true, script: "grep ImageTag values.yaml | awk '{print \$2}'")
 }
 
+String getTargetNamespace() {
+  return BRANCH_NAME == 'master' ? 'platform' : 'platform-staging'
+}
+
 pipeline {
   agent {
     label 'jenkins-jx-base'
   }
   environment {
+    NAMESPACE = getTargetNamespace()
     SERVICE_ACCOUNT = 'jenkins'
   }
   stages {
-    stage('Upgrade Jenkins X platform') {
+    stage('Upgrade Jenkins X') {
       steps {
-        setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X platform', 'PENDING')
+        setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X', 'PENDING')
         container('jx-base') {
-          echo "Upgrade Jenkins X platform using jenkins image tag ${getJenkinsImageTag()}"
+          echo "Upgrade Jenkins X in the ${NAMESPACE} namespace using jenkins image tag ${getJenkinsImageTag()}"
           script {
             // get the existing docker registry auth
-            def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
+            def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -n ${NAMESPACE} -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
             // get the existing nexus password
-            def nexusPassword = sh(script: 'kubectl get secret -o=jsonpath=\'{.data.password}\' nexus | base64 --decode', returnStdout: true)
-            // upgrade Jenkins platform
-            withEnv(["DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}", "NEXUS_PASSWORD=${nexusPassword}"]) {
+            def nexusPassword = sh(script: 'kubectl get secret nexus -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
+            // upgrade Jenkins
+            withEnv([
+              "INTERNAL_DOCKER_REGISTRY=${DOCKER_REGISTRY}",
+              "DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}",
+              "NEXUS_PASSWORD=${nexusPassword}",
+            ]) {
               sh """
                 # initialize Helm without installing Tiller
                 helm init --client-only --service-account ${SERVICE_ACCOUNT}
@@ -66,11 +75,13 @@ pipeline {
                 # add local chart repository
                 helm repo add jenkins-x http://chartmuseum.jenkins-x.io
 
-                # replace env vars in values.yaml: DOCKER_REGISTRY, DOCKER_REGISTRY_CONFIG
-                envsubst < values.yaml > myvalues.yaml
+                # replace env vars in values.yaml
+                # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
+                # platform-staging (PR) or platform (master)
+                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${NEXUS_PASSWORD}' < values.yaml > myvalues.yaml
 
-                # upgrade Jenkins X platform
-                jx upgrade platform --namespace=platform \
+                # upgrade Jenkins X
+                jx upgrade platform --namespace=${NAMESPACE} \
                   --version 2.0.1547 \
                   --local-cloud-environment \
                   --always-upgrade \
@@ -90,17 +101,14 @@ pipeline {
       }
       post {
         success {
-          setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X platform', 'SUCCESS')
+          setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X', 'SUCCESS')
         }
         failure {
-          setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X platform', 'FAILURE')
+          setGitHubBuildStatus('upgrade', 'Upgrade Jenkins X', 'FAILURE')
         }
       }
     }
     stage('Perform Git release') {
-      // TODO: skip if no changes since latest tag, to be able to manually run the pipeline on the master branch
-      // in order to revert a bad "jx upgrade platform" launched by a PR. This would run "jx upgrade platform"
-      // on the latest (stable) tag, aka master, without adding add an extra Git tag.
       when {
         branch 'master'
       }
