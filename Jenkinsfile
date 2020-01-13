@@ -48,6 +48,7 @@ pipeline {
     label 'jenkins-jx-base'
   }
   environment {
+    JX_VERSION = '2.0.1849'
     NAMESPACE = getTargetNamespace()
     SERVICE_ACCOUNT = 'jenkins'
   }
@@ -82,7 +83,7 @@ pipeline {
 
                 # upgrade Jenkins X
                 jx upgrade platform --namespace=${NAMESPACE} \
-                  --version 2.0.1547 \
+                  --version ${JX_VERSION} \
                   --local-cloud-environment \
                   --always-upgrade \
                   --cleanup-temp-files=true \
