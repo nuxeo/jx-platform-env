@@ -83,5 +83,7 @@ When importing, answer as following:
 For each project, remove the following webhook created automatically in the related GitHub repository:
 
 ```shell
-https://jenkins.platform-staging.dev.nuxeo.com/github-webhook/ 
+https://jenkins.platform-staging.dev.nuxeo.com/github-webhook/
 ```
+
+Rename the `nuxeo-jsf-ui` project to `nuxeo-jsf-ui-status`.
