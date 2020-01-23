@@ -65,7 +65,7 @@ kubectl get secret -n platform-staging jenkins -o jsonpath='{.data.jenkins-admin
 Then import the following projects:
 
 ```shell
-jx import --disable-updatebot --no-draft --branches master --url https://github.com/nuxeo/nuxeo-helm-charts
+jx import --disable-updatebot --no-draft --branches master --url https://github.com/nuxeo/nuxeo-helm-chart
 jx import --disable-updatebot --no-draft --branches master --url https://github.com/nuxeo/jx-platform-builders
 jx import --disable-updatebot --no-draft --branches master --url https://github.com/nuxeo/nuxeo
 jx import --disable-updatebot --no-draft --jenkinsfile Jenkinsfiles/build-status.groovy --branches master --url https://github.com/nuxeo/nuxeo-jsf-ui
