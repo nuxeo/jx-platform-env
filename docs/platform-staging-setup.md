@@ -15,6 +15,9 @@ kubectl get secret jenkins-docker-cfg --namespace=platform --export -o yaml |\
 
 kubectl get secret jenkins-secrets --namespace=platform --export -o yaml |\
    kubectl apply --namespace=platform-staging -f -
+
+kubectl get secret kaniko-secret --namespace=platform --export -o yaml |\
+   kubectl apply --namespace=platform-staging -f -
 ```
 
 ## GitHub OAuth
