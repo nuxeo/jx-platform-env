@@ -83,10 +83,14 @@ When importing, answer as following:
 ? Do you wish to use nuxeo-platform-jx-bot as the Git user name: Y
 ```
 
-For each project, remove the following webhook created automatically in the related GitHub repository:
+To avoid the jobs being triggered automatically, for each project:
 
-```shell
-https://jenkins.platform-staging.dev.nuxeo.com/github-webhook/
-```
+- Remove the following webhook created automatically in the related GitHub repository:
+
+  ```shell
+  https://jenkins.platform-staging.dev.nuxeo.com/github-webhook/
+  ```
+
+- Disable branch indexing by unchecking "Periodically if not otherwise run" in Configure > Scan Repository Triggers.
 
 Rename the `nuxeo-jsf-ui` project to `nuxeo-jsf-ui-status`.
