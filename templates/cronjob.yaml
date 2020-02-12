@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: platform
+  name: aws-credentials-updater
+
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: platform
+  name: secret-edit
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list", "update"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: platform
+  name: aws-credentials-updater-rolebinding
+subjects:
+- kind: ServiceAccount
+  name: aws-credentials-updater
+roleRef:
+  kind: Role
+  name: secret-edit
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: platform
+  name: rotate-keys
+spec:
+  schedule: "* */23 * * *"  # It takes a Cron format string, as schedule time of its jobs to be created and executed (in our case the job will be run every 23 hours after last runned one).
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            parent: "rotate-keys"
+        spec:
+          containers:
+          - name: rotate
+            image: nuxeo/aws-iam-credential-rotate
+          restartPolicy: Never
+          serviceAccount: aws-credentials-updater
+          serviceAccountName: aws-credentials-updater
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
