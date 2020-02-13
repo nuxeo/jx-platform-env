@@ -6,8 +6,8 @@ metadata:
 
 ---
 
-kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
   namespace: platform
   name: secret-edit
@@ -17,8 +17,9 @@ rules:
   verbs: ["get", "watch", "list", "update"]
 
 ---
-kind: RoleBinding
+
 apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
 metadata:
   namespace: platform
   name: aws-credentials-updater-rolebinding
@@ -38,7 +39,7 @@ metadata:
   namespace: platform
   name: rotate-keys
 spec:
-  schedule: "* */23 * * *"  # It takes a Cron format string, as schedule time of its jobs to be created and executed (in our case the job will be run every 23 hours after last runned one).
+  schedule: "0 1 * * *"  # It takes a Cron format string, as schedule time of its jobs to be created and executed (in our case the job Will run every day at 01:00).
   jobTemplate:
     spec:
       template:
