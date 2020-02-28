@@ -242,4 +242,7 @@ PipelineSecrets:
         <!--make the profile active all the time -->
         <activeProfile>nexus</activeProfile>
       </activeProfiles>
+      <properties>
+        <nuxeo.skip.enforcer>false</nuxeo.skip.enforcer>
+      </properties>
     </settings>
