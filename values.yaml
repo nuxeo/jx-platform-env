@@ -227,6 +227,7 @@ PipelineSecrets:
             <altDeploymentRepository>nexus::default::http://nexus/repository/maven-public/</altDeploymentRepository>
             <altReleaseDeploymentRepository>nexus::default::http://nexus/repository/maven-public/</altReleaseDeploymentRepository>
             <altSnapshotDeploymentRepository>nexus::default::http://nexus/repository/maven-public/</altSnapshotDeploymentRepository>
+            <nuxeo.skip.enforcer>false</nuxeo.skip.enforcer>
           </properties>
         </profile>
         <profile>
@@ -235,6 +236,7 @@ PipelineSecrets:
             <altDeploymentRepository>nexus::default::http://nexus/repository/maven-private/</altDeploymentRepository>
             <altReleaseDeploymentRepository>nexus::default::http://nexus/repository/maven-private/</altReleaseDeploymentRepository>
             <altSnapshotDeploymentRepository>nexus::default::http://nexus/repository/maven-private/</altSnapshotDeploymentRepository>
+            <nuxeo.skip.enforcer>false</nuxeo.skip.enforcer>
           </properties>
         </profile>
       </profiles>
@@ -242,7 +244,4 @@ PipelineSecrets:
         <!--make the profile active all the time -->
         <activeProfile>nexus</activeProfile>
       </activeProfiles>
-      <properties>
-        <nuxeo.skip.enforcer>false</nuxeo.skip.enforcer>
-      </properties>
     </settings>
