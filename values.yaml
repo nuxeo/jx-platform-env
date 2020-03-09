@@ -105,10 +105,10 @@ jenkins:
           Maven:
             Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
-            RequestCpu: "3"
-            RequestMemory: "4Gi"
-            LimitCpu: "4"
-            LimitMemory: "8Gi"
+            RequestCpu: "6"
+            RequestMemory: "8Gi"
+            LimitCpu: "8"
+            LimitMemory: "16Gi"
             # You may want to change this to true while testing a new image
             # AlwaysPullImage: true
             Tty: true
