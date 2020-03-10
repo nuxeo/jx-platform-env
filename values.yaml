@@ -80,6 +80,12 @@ jenkins:
         YUM_REGISTRY: http://nexus.platform/repository/yum-registry/
   Agent:
     PodTemplates:
+      # fix jx create devpod -l jx-base
+      JX-base:
+        DevPodPorts: 9999
+        Containers:
+          JX-base:
+            LimitCpu: "1"
       Nuxeo-Package-10:
         Name: nuxeo-package-10
         Label: jenkins-nuxeo-package-10
