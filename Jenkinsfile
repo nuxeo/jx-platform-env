@@ -80,6 +80,8 @@ pipeline {
                 # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
                 # platform-staging (PR) or platform (master)
                 envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${NEXUS_PASSWORD}' < values.yaml > myvalues.yaml
+                # replace env vars in templates/docker-ingress.yaml
+                envsubst '\${NAMESPACE}' < templates/docker-ingress.yaml > templates/my-docker-ingress.yaml
 
                 # upgrade Jenkins X
                 jx upgrade platform --namespace=${NAMESPACE} \
@@ -92,9 +94,15 @@ pipeline {
                 # log jenkins deployment image
                 kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'
 
+                # Patch Jenkins Deployment to add nexus registry pull secret
+                kubectl patch deployment jenkins -n ${NAMESPACE} --patch "\$(cat templates/jenkins-master-deployment-patch.yaml)"
+
                 # restart Jenkins pod
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 1
+
+                # create or update docker ingress service
+                kubectl apply -f templates/my-docker-ingress.yaml
               """
             }
           }

@@ -75,6 +75,7 @@ jenkins:
     Global:
       EnvVars:
         ARENDER_DOCKER_REGISTRY: docker-arender.packages.nuxeo.com
+        DOCKER_REGISTRY: docker.$NAMESPACE.dev.nuxeo.com
         PRIVATE_DOCKER_REGISTRY: docker-private.packages.nuxeo.com
         PUBLIC_DOCKER_REGISTRY: docker.packages.nuxeo.com
         YUM_REGISTRY: http://nexus.platform/repository/yum-registry/
@@ -112,6 +113,7 @@ jenkins:
           # lets disable the noisy download artifact logging messages
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
+        ImagePullSecret: nexus-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -154,6 +156,7 @@ jenkins:
           # lets disable the noisy download artifact logging messages
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
+        ImagePullSecret: nexus-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -196,6 +199,7 @@ jenkins:
           # lets disable the noisy download artifact logging messages
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
+        ImagePullSecret: nexus-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -232,6 +236,7 @@ jenkins:
           XDG_CONFIG_HOME: /home/jenkins
           DOCKER_CONFIG: /home/jenkins/.docker/
         ServiceAccount: jenkins
+        ImagePullSecret: nexus-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -249,9 +254,12 @@ jenkins:
             Args: "cat"
             Tty: true
 docker-registry:
-  persistence:
-    size: 300Gi
+  enabled: false
+
 nexus:
+  service:
+    annotations: #disable the maximum allowed size of the client request body, to prevent push error for large image
+      fabric8.io/ingress.annotations: "kubernetes.io/ingress.class: nginx\nnginx.ingress.kubernetes.io/proxy-body-size: 0"
   persistence:
     size: 310Gi
 PipelineSecrets:
