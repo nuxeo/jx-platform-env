@@ -63,10 +63,10 @@ jenkins:
           Maven:
             Image: $DOCKER_REGISTRY/nuxeo/builder-java8:latest
             Privileged: true
-            RequestCpu: "3"
-            RequestMemory: "4Gi"
-            LimitCpu: "4"
-            LimitMemory: "8Gi"
+            RequestCpu: "1"
+            RequestMemory: "512Mi"
+            LimitCpu: "2"
+            LimitMemory: "1Gi"
             # You may want to change this to true while testing a new image
             # AlwaysPullImage: true
             Tty: true
@@ -105,9 +105,9 @@ jenkins:
           Maven:
             Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
-            RequestCpu: "3"
+            RequestCpu: "4"
             RequestMemory: "4Gi"
-            LimitCpu: "4"
+            LimitCpu: "8"
             LimitMemory: "8Gi"
             # You may want to change this to true while testing a new image
             # AlwaysPullImage: true
@@ -147,10 +147,10 @@ jenkins:
           Maven:
             Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:latest
             Privileged: true
-            RequestCpu: "3"
+            RequestCpu: "1.5"
             RequestMemory: "4Gi"
-            LimitCpu: "4"
-            LimitMemory: "8Gi"
+            LimitCpu: "3"
+            LimitMemory: "6Gi"
             # You may want to change this to true while testing a new image
             # AlwaysPullImage: true
             Tty: true
@@ -183,7 +183,7 @@ jenkins:
           Rpm:
             Image: $DOCKER_REGISTRY/nuxeo/builder-rpm:latest
             Privileged: true
-            RequestCpu: "1"
+            RequestCpu: "250m"
             RequestMemory: "256Mi"
             # You may want to change this to true while testing a new image
             # AlwaysPullImage: true
