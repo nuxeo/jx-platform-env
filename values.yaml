@@ -247,7 +247,7 @@ docker-registry:
     size: 300Gi
 nexus:
   persistence:
-    size: 300Gi
+    size: 310Gi
 PipelineSecrets:
   DockerConfig: |-
     $DOCKER_REGISTRY_CONFIG
