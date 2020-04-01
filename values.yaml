@@ -257,9 +257,6 @@ docker-registry:
   enabled: false
 
 nexus:
-  service:
-    annotations: #disable the maximum allowed size of the client request body, to prevent push error for large image
-      fabric8.io/ingress.annotations: "kubernetes.io/ingress.class: nginx\nnginx.ingress.kubernetes.io/proxy-body-size: 0"
   persistence:
     size: 310Gi
 PipelineSecrets:

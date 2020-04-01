@@ -97,6 +97,9 @@ pipeline {
                 # Patch Jenkins Deployment to add nexus registry pull secret
                 kubectl patch deployment jenkins -n ${NAMESPACE} --patch "\$(cat templates/jenkins-master-deployment-patch.yaml)"
 
+                # Patch Nexus Ingress : Disable the maximum allowed size of the client request body, to prevent push error for large image
+                kubectl patch ingress nexus -n ${NAMESPACE} --patch "\$(cat templates/nexus-ingress-patch.yaml)"
+
                 # restart Jenkins pod
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 1

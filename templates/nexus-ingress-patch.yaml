@@ -1,0 +1,3 @@
+metadata:
+  annotations: #disable the maximum allowed size of the client request body, to prevent push error for large image
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
