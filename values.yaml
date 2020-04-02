@@ -157,6 +157,8 @@ jenkins:
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: nexus-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
