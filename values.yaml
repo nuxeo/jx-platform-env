@@ -255,14 +255,12 @@ jenkins:
             Tty: true
 docker-registry:
   enabled: false
-
 nexus:
   persistence:
     size: 310Gi
 PipelineSecrets:
   DockerConfig: |-
     $DOCKER_REGISTRY_CONFIG
-
   MavenSettingsXML: |-
     <settings>
       <!-- sets the local maven repository outside of the ~/.m2 folder for easier mounting of secrets and repo -->
