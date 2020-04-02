@@ -166,10 +166,34 @@ jenkins:
           Maven:
             Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
+            RequestCpu: "3"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
+          Maven-dev:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
-            LimitCpu: "8"
-            LimitMemory: "8Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
+          Maven-mongodb:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Privileged: true
+            RequestCpu: "4"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
+          Maven-postgresql:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Privileged: true
+            RequestCpu: "4"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
             Tty: true
       Nuxeo-JSF-11:
         Name: nuxeo-jsf-11
