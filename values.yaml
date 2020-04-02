@@ -127,8 +127,6 @@ jenkins:
             RequestMemory: "512Mi"
             LimitCpu: "2"
             LimitMemory: "1Gi"
-            # You may want to change this to true while testing a new image
-            # AlwaysPullImage: true
             Tty: true
       Nuxeo-Platform-11:
         Name: nuxeo-platform-11
@@ -172,8 +170,6 @@ jenkins:
             RequestMemory: "4Gi"
             LimitCpu: "8"
             LimitMemory: "8Gi"
-            # You may want to change this to true while testing a new image
-            # AlwaysPullImage: true
             Tty: true
       Nuxeo-JSF-11:
         Name: nuxeo-jsf-11
@@ -215,8 +211,6 @@ jenkins:
             RequestMemory: "4Gi"
             LimitCpu: "3"
             LimitMemory: "6Gi"
-            # You may want to change this to true while testing a new image
-            # AlwaysPullImage: true
             Tty: true
       Nuxeo-Third-Party-RPMs:
         Name: nuxeo-third-party-rpms
@@ -250,8 +244,6 @@ jenkins:
             Privileged: true
             RequestCpu: "250m"
             RequestMemory: "256Mi"
-            # You may want to change this to true while testing a new image
-            # AlwaysPullImage: true
             Command: "/bin/sh -c"
             Args: "cat"
             Tty: true
