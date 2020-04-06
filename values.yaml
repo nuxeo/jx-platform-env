@@ -299,6 +299,18 @@ PipelineSecrets:
           <id>nexus</id>
           <username>admin</username>
           <password>$NEXUS_PASSWORD</password>
+          <!--
+              Due to frequent connection reset when retrieving large files from nexus,
+              connection and read timeout should be increased to prevent functional or units test to fail.
+          -->
+          <configuration>
+            <httpConfiguration>
+              <get>
+                <connectionTimeout>1200000</connectionTimeout>
+                <readTimeout>1200000</readTimeout>
+              </get>
+            </httpConfiguration>
+          </configuration>
         </server>
       </servers>
       <profiles>
