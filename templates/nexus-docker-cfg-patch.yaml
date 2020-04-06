@@ -1,0 +1,5 @@
+metadata:
+  annotations:
+    replicator.v1.mittwald.de/replication-allowed: "true"
+    replicator.v1.mittwald.de/replication-allowed-namespaces: nuxeo-*,nuxeo-unit-tests-*,nuxeo-arender-*
+

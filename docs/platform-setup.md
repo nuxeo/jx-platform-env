@@ -144,6 +144,31 @@ Unfortunately, `nexus-docker-cfg` and `jenkins-docker-cfg` can seem duplicated, 
 
 - Kaniko expects to have a secret with the `Opaque` type and data to be stored in `data/config.json`.
 
+##### Allow Docker Secret to Be Replicated
+
+To enable secret replicator for `nexus-docker-cfg` , apply this patch on it.
+
+```bash
+  kubectl patch secret/nexus-docker-cfg -n ${NAMESPACE} --patch "\$(cat templates/nexus-docker-cfg-patch.yaml)"
+```
+
+You can create the new secret replica using this template file:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nexus-docker-cfg-replica
+  namespace:  nuxeo-arender
+  annotations:
+    replicator.v1.mittwald.de/replicate-from: platform/nexus-docker-cfg
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: e30K
+```
+
+> More information is available at [kubernetes-replicator](https://github.com/mittwald/kubernetes-replicator#special-case-docker-registry-credentials).
+
 #### Configure Pod Templates
 
 If a PodTemplate needs to retrieve an image from the nexus docker repository, this line must be added:
