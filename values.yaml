@@ -142,6 +142,8 @@ jenkins:
           - type: Secret
             secretName: jenkins-release-gpg
             mountPath: /home/jenkins/.gnupg
+          - type: EmptyDir
+            mountPath: /root/.mvnrepository
         EnvVars:
           JENKINS_URL: http://jenkins:8080
           JAVA_TOOL_OPTIONS: "-Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90"
