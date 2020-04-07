@@ -130,26 +130,28 @@ cluster:
 
 #### Create a Secret Based on Existing Docker Credentials
 
-We suppose you have a json file containing credentials for `docker.platform.dev.nuxeo.com`
+We suppose the Kubernetes secret `jenkins-docker-cfg` already exists in the `platform` namespace:
 
 ```bash
-kubectl create secret generic nexus-docker-cfg \
-    --from-file=.dockerconfigjson=<PATH>/config.json \
+kubectl create secret generic kubernetes-docker-cfg \
+    --from-literal=.dockerconfigjson="$(kubectl get secret jenkins-docker-cfg -ojsonpath='{.data.config\.json}' | base64 --decode)" \
     --type=kubernetes.io/dockerconfigjson
 ```
 
-Unfortunately, `nexus-docker-cfg` and `jenkins-docker-cfg` can seem duplicated, it is due to secret format:
+Unfortunately, `kubernetes-docker-cfg` and `jenkins-docker-cfg` can seem duplicated, it is due to secret format:
 
 - Kubernetes expects to have a secret with the `kubernetes.io/dockerconfigjson` type and data to be stored in `data/.dockerconfigjson`.
 
 - Kaniko expects to have a secret with the `Opaque` type and data to be stored in `data/config.json`.
 
+> The `kubernetes-docker-cfg` and `jenkins-docker-cfg` secrets must be kept synchronized.
+
 ##### Allow Docker Secret to Be Replicated
 
-To enable secret replicator for `nexus-docker-cfg` , apply this patch on it.
+To enable secret replicator for `kubernetes-docker-cfg` , apply this patch on it.
 
 ```bash
-  kubectl patch secret/nexus-docker-cfg -n ${NAMESPACE} --patch "\$(cat templates/nexus-docker-cfg-patch.yaml)"
+  kubectl patch secret/kubernetes-docker-cfg -n ${NAMESPACE} --patch "\$(cat templates/kubernetes-docker-cfg-patch.yaml)"
 ```
 
 You can create the new secret replica using this template file:
@@ -158,10 +160,10 @@ You can create the new secret replica using this template file:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: nexus-docker-cfg-replica
+  name: kubernetes-docker-cfg-replica
   namespace:  nuxeo-arender
   annotations:
-    replicator.v1.mittwald.de/replicate-from: platform/nexus-docker-cfg
+    replicator.v1.mittwald.de/replicate-from: platform/kubernetes-docker-cfg
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: e30K
@@ -177,5 +179,5 @@ If a PodTemplate needs to retrieve an image from the nexus docker repository, th
   Agent:
     PodTemplates:
       Nuxeo-Package-11:
-        ImagePullSecret: nexus-docker-cfg
+        ImagePullSecret: kubernetes-docker-cfg
 ```

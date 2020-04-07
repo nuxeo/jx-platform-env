@@ -113,7 +113,7 @@ jenkins:
           # lets disable the noisy download artifact logging messages
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
-        ImagePullSecret: nexus-docker-cfg
+        ImagePullSecret: kubernetes-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -156,7 +156,7 @@ jenkins:
           # lets disable the noisy download artifact logging messages
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
-        ImagePullSecret: nexus-docker-cfg
+        ImagePullSecret: kubernetes-docker-cfg
         NodeSelector:
           team: platform
         Containers:
@@ -223,7 +223,7 @@ jenkins:
           # lets disable the noisy download artifact logging messages
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
-        ImagePullSecret: nexus-docker-cfg
+        ImagePullSecret: kubernetes-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -258,7 +258,7 @@ jenkins:
           XDG_CONFIG_HOME: /home/jenkins
           DOCKER_CONFIG: /home/jenkins/.docker/
         ServiceAccount: jenkins
-        ImagePullSecret: nexus-docker-cfg
+        ImagePullSecret: kubernetes-docker-cfg
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine

@@ -2,4 +2,4 @@ spec:
   template:
     spec:
       imagePullSecrets:
-      - name: nexus-docker-cfg
+      - name: kubernetes-docker-cfg
