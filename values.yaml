@@ -61,7 +61,7 @@ gcactivities:
 jenkins:
   Master:
     Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
-    ImageTag: 0.0.22
+    ImageTag: 0.0.25
   Persistence:
     volumes:
       - name: jenkins-secrets
