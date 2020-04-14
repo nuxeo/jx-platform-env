@@ -79,29 +79,32 @@ to
 
 https://nexus.platform.dev.nuxeo.com/repository/docker-registry/
 
-- Create an ingress configuration file following this [example](../templates/docker-ingress.yaml)
+- Create new service configuration file following this [example](../templates/docker-service.yaml)
 
 ```bash
 NAMESPACE=platform
-envsubst '${NAMESPACE}' < templates/docker-ingress.yaml > templates/my-docker-ingress.yaml
+envsubst '${NAMESPACE}' < templates/docker-service.yaml > templates/docker-service.yaml~gen
 ```
 
-- Create new ingress service from the configuration file
+- Create new docker service from the configuration file
 
 ```bash
-kubectl create -f templates/my-docker-ingress.yaml
+kubectl create -f templates/docker-service.yaml~gen
 ```
 
-- Check if the ingress service is ready
+- Check if the docker service is ready
 
 ```bash
-kubectl get -f templates/my-docker-ingress.yaml
+kubectl get -f templates/docker-service.yaml~gen
 ```
+
+A new ingress rule with the same name will be created (or updated if already exists) by the [exposecontroller](https://github.com/jenkins-x/exposecontroller).
 
 - List the catalog from the new nexus docker registry
 
 ```bash
-DOCKER_REGISTRY=$(kubectl get -f templates/my-docker-ingress.yaml -o json --output=jsonpath={.spec.rules[].host} )
+SERVICE=$(kubectl get -f templates/docker-service.yaml~gen -o json --output=jsonpath={.metadata.name})
+DOCKER_REGISTRY=$(kubectl get ingress ${SERVICE} -o json --output=jsonpath={.spec.rules[].host})
 curl https://${DOCKER_REGISTRY}/v2/_catalog
 ```
 

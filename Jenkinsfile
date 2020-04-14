@@ -80,8 +80,11 @@ pipeline {
                 # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
                 # platform-staging (PR) or platform (master)
                 envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${NEXUS_PASSWORD}' < values.yaml > myvalues.yaml
-                # replace env vars in templates/docker-ingress.yaml
-                envsubst '\${NAMESPACE}' < templates/docker-ingress.yaml > templates/docker-ingress.yaml~gen
+                # replace env vars in templates/docker-service.yaml
+                envsubst '\${NAMESPACE}' < templates/docker-service.yaml > templates/docker-service.yaml~gen
+
+                # create or update Docker Ingress/Service
+                kubectl apply -f templates/docker-service.yaml~gen
 
                 # upgrade Jenkins X
                 jx upgrade platform --namespace=${NAMESPACE} \
@@ -96,12 +99,6 @@ pipeline {
 
                 # patch Jenkins deployment to add Nexus Docker registry pull secret
                 kubectl patch deployment jenkins -n ${NAMESPACE} --patch "\$(cat templates/jenkins-master-deployment-patch.yaml)"
-
-                # create or update Docker Ingress
-                kubectl apply -f templates/docker-ingress.yaml~gen
-
-                # patch Nexus Ingress: disable the maximum allowed size of the client request body, to prevent push error for large images
-                kubectl patch ingress nexus -n ${NAMESPACE} --patch "\$(cat templates/nexus-ingress-patch.yaml)"
 
                 # Patch nuxeo-platform-11 PodTemplate XML ConfigMap to define tolerations and allow the pods being
                 # scheduled on a dedicated node pool, see https://jira.nuxeo.com/browse/NXBT-3277.
