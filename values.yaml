@@ -154,6 +154,7 @@ jenkins:
           XDG_CONFIG_HOME: /home/jenkins
           DOCKER_CONFIG: /home/jenkins/.docker/
           # lets disable the noisy download artifact logging messages
+          # test purpose
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
