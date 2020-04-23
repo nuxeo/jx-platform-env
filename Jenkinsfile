@@ -43,11 +43,16 @@ String getTargetNamespace() {
   return BRANCH_NAME == 'master' ? 'platform' : 'platform-staging'
 }
 
+String getDryRun() {
+  return BRANCH_NAME == 'master' ? 'false' : 'true'
+}
+
 pipeline {
   agent {
     label 'jenkins-jx-base'
   }
   environment {
+    DRY_RUN = getDryRun()
     JX_VERSION = '2.0.1849'
     NAMESPACE = getTargetNamespace()
     SERVICE_ACCOUNT = 'jenkins'
@@ -79,7 +84,7 @@ pipeline {
                 # replace env vars in values.yaml
                 # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
                 # platform-staging (PR) or platform (master)
-                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${NEXUS_PASSWORD}' < values.yaml > myvalues.yaml
+                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${NEXUS_PASSWORD} \${DRY_RUN}' < values.yaml > myvalues.yaml
                 # replace env vars in templates/docker-service.yaml
                 envsubst '\${NAMESPACE}' < templates/docker-service.yaml > templates/docker-service.yaml~gen
 
