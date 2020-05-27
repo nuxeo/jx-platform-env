@@ -292,36 +292,14 @@ PipelineSecrets:
         <mirror>
           <id>nexus</id>
           <mirrorOf>external:*</mirrorOf>
-          <url>http://nexus/repository/maven-group/</url>
+          <url>https://packages.nuxeo.com/repository/maven-internal/</url>
         </mirror>
       </mirrors>
       <servers>
         <server>
           <id>nexus</id>
-          <username>admin</username>
-          <password>$NEXUS_PASSWORD</password>
+          <username>deploymentJX</username>
+          <password>$PACKAGES_PASSWORD</password>
         </server>
       </servers>
-      <profiles>
-        <profile>
-          <id>nexus</id>
-          <properties>
-            <altDeploymentRepository>nexus::default::http://nexus/repository/maven-public/</altDeploymentRepository>
-            <altReleaseDeploymentRepository>nexus::default::http://nexus/repository/maven-public/</altReleaseDeploymentRepository>
-            <altSnapshotDeploymentRepository>nexus::default::http://nexus/repository/maven-public/</altSnapshotDeploymentRepository>
-          </properties>
-        </profile>
-        <profile>
-          <id>nexus-private</id>
-          <properties>
-            <altDeploymentRepository>nexus::default::http://nexus/repository/maven-private/</altDeploymentRepository>
-            <altReleaseDeploymentRepository>nexus::default::http://nexus/repository/maven-private/</altReleaseDeploymentRepository>
-            <altSnapshotDeploymentRepository>nexus::default::http://nexus/repository/maven-private/</altSnapshotDeploymentRepository>
-          </properties>
-        </profile>
-      </profiles>
-      <activeProfiles>
-        <!--make the profile active all the time -->
-        <activeProfile>nexus</activeProfile>
-      </activeProfiles>
     </settings>

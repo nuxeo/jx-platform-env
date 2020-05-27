@@ -67,12 +67,12 @@ pipeline {
             // get the existing docker registry auth
             def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -n ${NAMESPACE} -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
             // get the existing nexus password
-            def nexusPassword = sh(script: 'kubectl get secret nexus -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
+            def packagesPassword = sh(script: 'kubectl get secret packages.nuxeo.com-auth -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
             // upgrade Jenkins
             withEnv([
               "INTERNAL_DOCKER_REGISTRY=${DOCKER_REGISTRY}",
               "DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}",
-              "NEXUS_PASSWORD=${nexusPassword}",
+              "PACKAGES_PASSWORD=${packagesPassword}",
             ]) {
               sh """
                 # initialize Helm without installing Tiller
@@ -84,7 +84,7 @@ pipeline {
                 # replace env vars in values.yaml
                 # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
                 # platform-staging (PR) or platform (master)
-                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${NEXUS_PASSWORD} \${DRY_RUN}' < values.yaml > myvalues.yaml
+                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${PACKAGES_PASSWORD} \${DRY_RUN}' < values.yaml > myvalues.yaml
                 # replace env vars in templates/docker-service.yaml
                 envsubst '\${NAMESPACE}' < templates/docker-service.yaml > templates/docker-service.yaml~gen
 
