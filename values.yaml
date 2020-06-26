@@ -239,6 +239,48 @@ jenkins:
             LimitCpu: "3"
             LimitMemory: "6Gi"
             Tty: true
+      Nuxeo-Team-Report:
+        Name: nuxeo-team-report
+        Label: jenkins-nuxeo-team-report
+        DevPodPorts: 5005
+        volumes:
+          - type: Secret
+            secretName: jenkins-docker-cfg
+            mountPath: /home/jenkins/.docker
+          - type: Secret
+            secretName: jenkins-release-gpg
+            mountPath: /home/jenkins/.gnupg
+        EnvVars:
+          JENKINS_URL: http://jenkins:8080
+          GIT_COMMITTER_EMAIL: platform+jx-bot@nuxeo.com
+          GIT_AUTHOR_EMAIL: platform+jx-bot@nuxeo.com
+          GIT_AUTHOR_NAME: nuxeo-platform-jx-bot
+          GIT_COMMITTER_NAME: nuxeo-platform-jx-bot
+          XDG_CONFIG_HOME: /home/jenkins
+          DOCKER_CONFIG: /home/jenkins/.docker/
+        ServiceAccount: jenkins
+        ImagePullSecret: kubernetes-docker-cfg
+        Containers:
+          Jnlp:
+            Image: jenkinsci/jnlp-slave:3.26-1-alpine
+            RequestCpu: "100m"
+            RequestMemory: "128Mi"
+            Args: "${computer.jnlpmac} ${computer.name}"
+          Builder:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-base:latest
+            Privileged: true
+            RequestCpu: "100m"
+            RequestMemory: "128Mi"
+            Command: "/bin/sh -c"
+            Args: "cat"
+            Tty: true
+          Singlefile:
+            Image: $DOCKER_REGISTRY/nuxeo/singlefile:latest
+            Privileged: true
+            RequestCpu: "100m"
+            RequestMemory: "128Mi"
+            Command: "sleep"
+            Args: "3600"
       Nuxeo-Third-Party-RPMs:
         Name: nuxeo-third-party-rpms
         Label: jenkins-nuxeo-third-party-rpms
