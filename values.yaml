@@ -235,9 +235,9 @@ jenkins:
             Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
             RequestCpu: "1"
-            RequestMemory: "512Mi"
+            RequestMemory: "2Gi"
             LimitCpu: "2"
-            LimitMemory: "1Gi"
+            LimitMemory: "3Gi"
             Tty: true
       Nuxeo-JSF-11:
         Name: nuxeo-jsf-11
