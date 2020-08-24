@@ -2,4 +2,4 @@
 
 Dependency | Sources | Version | Mismatched versions
 ---------- | ------- | ------- | -------------------
-[nuxeo/jx-platform-jenkins](https://github.com/nuxeo/jx-platform-jenkins) |  | [0.0.31](https://github.com/nuxeo/jx-platform-jenkins/releases/tag/v0.0.31) | 
+[nuxeo/jx-platform-jenkins](https://github.com/nuxeo/jx-platform-jenkins) |  | [0.0.32](https://github.com/nuxeo/jx-platform-jenkins/releases/tag/v0.0.32) | 
