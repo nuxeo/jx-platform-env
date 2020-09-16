@@ -3,5 +3,5 @@ dependencies:
   owner: nuxeo
   repo: jx-platform-jenkins
   url: https://github.com/nuxeo/jx-platform-jenkins
-  version: 0.0.34
-  versionURL: https://github.com/nuxeo/jx-platform-jenkins/releases/tag/v0.0.34
+  version: 0.0.35
+  versionURL: https://github.com/nuxeo/jx-platform-jenkins/releases/tag/v0.0.35
