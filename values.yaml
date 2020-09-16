@@ -88,6 +88,7 @@ jenkins:
         Containers:
           JX-base:
             LimitCpu: "1"
+            LimitMemory: "1Gi"
       Nuxeo-Package-10:
         Name: nuxeo-package-10
         Label: jenkins-nuxeo-package-10
