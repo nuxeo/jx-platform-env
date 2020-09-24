@@ -68,11 +68,16 @@ pipeline {
             def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -n ${NAMESPACE} -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
             // get the existing nexus password
             def packagesPassword = sh(script: 'kubectl get secret packages.nuxeo.com-auth -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
+            // get the existing Connect credentials
+            def connectUsername = sh(script: 'kubectl get secret connect-prod -n ${NAMESPACE} -o=jsonpath=\'{.data.username}\' | base64 --decode', returnStdout: true)
+            def connectPassword = sh(script: 'kubectl get secret connect-prod -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
             // upgrade Jenkins
             withEnv([
               "INTERNAL_DOCKER_REGISTRY=${DOCKER_REGISTRY}",
               "DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}",
               "PACKAGES_PASSWORD=${packagesPassword}",
+              "CONNECT_USERNAME=${connectUsername}",
+              "CONNECT_PASSWORD=${connectPassword}",
             ]) {
               sh """
                 # initialize Helm without installing Tiller
@@ -84,7 +89,7 @@ pipeline {
                 # replace env vars in values.yaml
                 # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
                 # platform-staging (PR) or platform (master)
-                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${PACKAGES_PASSWORD} \${DRY_RUN}' < values.yaml > myvalues.yaml
+                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${PACKAGES_PASSWORD} \${CONNECT_USERNAME} \${CONNECT_PASSWORD} \${DRY_RUN}' < values.yaml > myvalues.yaml
                 # replace env vars in templates/docker-service.yaml
                 envsubst '\${NAMESPACE}' < templates/docker-service.yaml > templates/docker-service.yaml~gen
 

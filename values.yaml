@@ -334,7 +334,7 @@ PipelineSecrets:
       <mirrors>
         <mirror>
           <id>nexus</id>
-          <mirrorOf>external:*</mirrorOf>
+          <mirrorOf>!nuxeo-studio,external:*</mirrorOf>
           <url>https://packages.nuxeo.com/repository/maven-internal/</url>
         </mirror>
       </mirrors>
@@ -343,6 +343,11 @@ PipelineSecrets:
           <id>nexus</id>
           <username>deploymentJX</username>
           <password>$PACKAGES_PASSWORD</password>
+        </server>
+        <server>
+          <id>nuxeo-studio</id>
+          <username>$CONNECT_USERNAME</username>
+          <password>$CONNECT_PASSWORD</password>
         </server>
       </servers>
       <profiles>
