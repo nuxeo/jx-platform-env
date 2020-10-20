@@ -61,7 +61,7 @@ gcactivities:
 jenkins:
   Master:
     Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
-    ImageTag: 0.0.35
+    ImageTag: 0.0.36
   Persistence:
     volumes:
       - name: jenkins-secrets
@@ -71,15 +71,6 @@ jenkins:
       - name: jenkins-secrets
         readOnly: true
         mountPath: /run/secrets/jenkins
-  Servers:
-    Global:
-      EnvVars:
-        ARENDER_DOCKER_REGISTRY: docker-arender.packages.nuxeo.com
-        DOCKER_REGISTRY: docker.$NAMESPACE.dev.nuxeo.com
-        DRY_RUN: $DRY_RUN
-        PRIVATE_DOCKER_REGISTRY: docker-private.packages.nuxeo.com
-        PUBLIC_DOCKER_REGISTRY: docker.packages.nuxeo.com
-        YUM_REGISTRY: http://nexus.platform/repository/yum-registry/
   Agent:
     PodTemplates:
       # fix jx create devpod -l jx-base
