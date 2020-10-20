@@ -50,7 +50,6 @@ pipeline {
   environment {
     JX_VERSION = '2.0.1849'
     NAMESPACE = getTargetNamespace()
-    SERVICE_ACCOUNT = 'jenkins'
   }
   stages {
     stage('Upgrade Jenkins X') {
@@ -76,7 +75,7 @@ pipeline {
             ]) {
               sh """
                 # initialize Helm without installing Tiller
-                helm init --client-only --service-account ${SERVICE_ACCOUNT}
+                helm init --client-only
 
                 # add local chart repository
                 helm repo add jenkins-x http://chartmuseum.jenkins-x.io
