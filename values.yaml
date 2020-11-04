@@ -348,6 +348,12 @@ PipelineSecrets:
             <altDeploymentRepository>nexus::default::https://packages.nuxeo.com/repository/maven-team-platform/</altDeploymentRepository>
           </properties>
         </profile>
+        <profile>
+          <id>nexus-private</id>
+          <properties>
+            <altDeploymentRepository>nexus::default::https://packages.nuxeo.com/repository/maven-team-platform-private/</altDeploymentRepository>
+          </properties>
+        </profile>
       </profiles>
       <activeProfiles>
         <activeProfile>nexus</activeProfile>
