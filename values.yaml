@@ -76,6 +76,8 @@ jenkins:
       # fix jx create devpod -l jx-base
       JX-base:
         DevPodPorts: 9999
+        NodeSelector:
+          team: platform
         Containers:
           JX-base:
             LimitCpu: "1"
@@ -107,6 +109,8 @@ jenkins:
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -217,6 +221,8 @@ jenkins:
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -258,6 +264,8 @@ jenkins:
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -368,6 +376,8 @@ jenkins:
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -409,6 +419,8 @@ jenkins:
           MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine
@@ -444,6 +456,8 @@ jenkins:
           DOCKER_CONFIG: /home/jenkins/.docker/
         ServiceAccount: jenkins
         ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
         Containers:
           Jnlp:
             Image: jenkinsci/jnlp-slave:3.26-1-alpine

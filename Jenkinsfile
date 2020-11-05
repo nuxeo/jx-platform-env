@@ -106,15 +106,7 @@ pipeline {
 
                 # Patch nuxeo-platform-11 PodTemplate XML ConfigMap to define tolerations and allow the pods being
                 # scheduled on a dedicated node pool, see https://jira.nuxeo.com/browse/NXBT-3277.
-                # Unfortunately, tolerations cannot be defined through values.yaml because the Kubernetes plugin for
-                # Jenkins doesn't take them into account when reading a pod template.
-                # The solution is to use a `yaml` field in the pod template, yet it isn't taken into account by the jenkins-x-platform chart.
-                # Thus this patch.
-                configXML=\$(kubectl get configmap jenkins-pod-xml-nuxeo-platform-11 -n ${NAMESPACE} -ojsonpath='{.data.config\\.xml}')
-                configXMLPatched=\$(echo "\$configXML" | awk -v yaml="\$(cat templates/jenkins-pod-xml-nuxeo-platform-11-patch.xml)" '/<name>nuxeo-platform-11<\\/name>/ { print; print yaml; next }1')
-                export CONFIG_XML_PATCHED=\$(echo "\$configXMLPatched" | awk '{print "    "\$0}')
-                envsubst '\${CONFIG_XML_PATCHED}' < templates/jenkins-pod-xml-nuxeo-platform-11-patch.yaml > templates/jenkins-pod-xml-nuxeo-platform-11-patch.yaml~gen
-                kubectl patch configmap jenkins-pod-xml-nuxeo-platform-11 -n ${NAMESPACE} --patch "\$(cat templates/jenkins-pod-xml-nuxeo-platform-11-patch.yaml~gen)"
+                ./scripts/pod-template-toleration-patch.sh
 
                 # restart Jenkins pod
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
