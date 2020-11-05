@@ -62,6 +62,10 @@ jenkins:
   Master:
     Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
     ImageTag: 0.0.36
+  Servers:
+    Global:
+      EnvVars:
+        DOCKER_REGISTRY: docker.$NAMESPACE.dev.nuxeo.com
   Persistence:
     volumes:
       - name: jenkins-secrets
