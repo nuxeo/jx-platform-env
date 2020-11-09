@@ -479,6 +479,9 @@ jenkins:
 docker-registry:
   enabled: false
 nexus:
+  image:
+    repository: gcr.io/jenkinsxio/nexus
+    tag: 0.1.36
   persistence:
     size: 310Gi
     storageClass: standard
