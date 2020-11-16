@@ -521,6 +521,9 @@ PipelineSecrets:
       <profiles>
         <profile>
           <id>nexus</id>
+          <activation>
+            <activeByDefault>true</activeByDefault>
+          </activation>
           <properties>
             <altDeploymentRepository>nexus::default::https://packages.nuxeo.com/repository/maven-team-platform/</altDeploymentRepository>
           </properties>
@@ -532,7 +535,4 @@ PipelineSecrets:
           </properties>
         </profile>
       </profiles>
-      <activeProfiles>
-        <activeProfile>nexus</activeProfile>
-      </activeProfiles>
     </settings>
