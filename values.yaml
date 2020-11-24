@@ -234,7 +234,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:latest
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "2Gi"
@@ -389,7 +389,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "2Gi"
