@@ -50,6 +50,8 @@ pipeline {
   environment {
     JX_VERSION = '2.0.1849'
     NAMESPACE = getTargetNamespace()
+    JENKINS_IMAGE_DOCKER_REGISTRY = "${DOCKER_REGISTRY}"
+    INTERNAL_DOCKER_REGISTRY = "docker.${NAMESPACE}.dev.nuxeo.com"
   }
   stages {
     stage('Upgrade Jenkins X') {
@@ -80,12 +82,9 @@ pipeline {
                 # add local chart repository
                 helm repo add jenkins-x http://chartmuseum.jenkins-x.io
 
-                # replace env vars in values.yaml
-                # specify them explicitly to not replace DOCKER_REGISTRY which needs to be relative to the upgraded namespace:
-                # platform-staging (PR) or platform (master)
-                envsubst '\${NAMESPACE} \${INTERNAL_DOCKER_REGISTRY} \${DOCKER_REGISTRY_CONFIG} \${PACKAGES_PASSWORD} \${CONNECT_USERNAME} \${CONNECT_PASSWORD}' < values.yaml > myvalues.yaml
-                # replace env vars in templates/docker-service.yaml
-                envsubst '\${NAMESPACE}' < templates/docker-service.yaml > templates/docker-service.yaml~gen
+                # replace env vars
+                envsubst < values.yaml > myvalues.yaml
+                envsubst < templates/docker-service.yaml > templates/docker-service.yaml~gen
 
                 # create or update Docker Ingress/Service
                 kubectl apply -f templates/docker-service.yaml~gen

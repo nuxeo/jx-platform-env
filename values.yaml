@@ -60,12 +60,12 @@ gcactivities:
       - delete
 jenkins:
   Master:
-    Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
-    ImageTag: 0.0.39
+    Image: $JENKINS_IMAGE_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
+    ImageTag: 0.0.40
   Servers:
     Global:
       EnvVars:
-        DOCKER_REGISTRY: docker.$NAMESPACE.dev.nuxeo.com
+        DOCKER_REGISTRY: $INTERNAL_DOCKER_REGISTRY
   Persistence:
     volumes:
       - name: jenkins-secrets
@@ -122,7 +122,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java8:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java8:latest
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "512Mi"
@@ -167,7 +167,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
             RequestCpu: "3"
             RequestMemory: "4Gi"
@@ -175,7 +175,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-dev:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -183,7 +183,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-mongodb:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -191,7 +191,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-postgresql:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:latest
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -234,7 +234,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:latest
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "2Gi"
@@ -277,7 +277,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:latest
             Privileged: true
             RequestCpu: "1.5"
             RequestMemory: "4Gi"
@@ -322,7 +322,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
             Privileged: true
             RequestCpu: "3"
             RequestMemory: "4Gi"
@@ -330,7 +330,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-dev:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -338,7 +338,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-mongodb:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -346,7 +346,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-postgresql:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -389,7 +389,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "2Gi"
@@ -432,7 +432,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
             Privileged: true
             RequestCpu: "1.5"
             RequestMemory: "4Gi"
@@ -469,7 +469,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Rpm:
-            Image: $DOCKER_REGISTRY/nuxeo/builder-rpm:latest
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-rpm:latest
             Privileged: true
             RequestCpu: "250m"
             RequestMemory: "256Mi"
