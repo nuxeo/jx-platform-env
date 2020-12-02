@@ -60,20 +60,10 @@ pipeline {
         container('jx-base') {
           echo "Upgrade Jenkins X in the ${NAMESPACE} namespace using jenkins image tag ${getJenkinsImageTag()}"
           script {
-            // get the existing docker registry auth
-            def dockerRegistryConfig = sh(script: 'kubectl get secret jenkins-docker-cfg -n ${NAMESPACE} -o go-template=\$\'{{index .data "config.json"}}\' | base64 --decode | tr -d \'\\n\'', returnStdout: true).trim();
-            // get the existing nexus password
-            def packagesPassword = sh(script: 'kubectl get secret packages.nuxeo.com-auth -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
-            // get the existing Connect credentials
-            def connectUsername = sh(script: 'kubectl get secret connect-prod -n ${NAMESPACE} -o=jsonpath=\'{.data.username}\' | base64 --decode', returnStdout: true)
-            def connectPassword = sh(script: 'kubectl get secret connect-prod -n ${NAMESPACE} -o=jsonpath=\'{.data.password}\' | base64 --decode', returnStdout: true)
-            // upgrade Jenkins
-            withEnv([
-              "INTERNAL_DOCKER_REGISTRY=${DOCKER_REGISTRY}",
-              "DOCKER_REGISTRY_CONFIG=${dockerRegistryConfig}",
-              "PACKAGES_PASSWORD=${packagesPassword}",
-              "CONNECT_USERNAME=${connectUsername}",
-              "CONNECT_PASSWORD=${connectPassword}",
+            withCredentials([
+              string(credentialsId: 'jenkins-docker-cfg', variable: 'DOCKER_REGISTRY_CONFIG'),
+              usernamePassword(credentialsId: 'packages.nuxeo.com-auth', usernameVariable: 'PACKAGES_USERNAME', passwordVariable: 'PACKAGES_PASSWORD'),
+              usernamePassword(credentialsId: 'connect-prod', usernameVariable: 'CONNECT_USERNAME', passwordVariable: 'CONNECT_PASSWORD'),
             ]) {
               sh """
                 # initialize Helm without installing Tiller

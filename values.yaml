@@ -509,7 +509,7 @@ PipelineSecrets:
       <servers>
         <server>
           <id>nexus</id>
-          <username>deploymentJX</username>
+          <username>$PACKAGES_USERNAME</username>
           <password>$PACKAGES_PASSWORD</password>
         </server>
         <server>
