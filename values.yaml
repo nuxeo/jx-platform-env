@@ -322,7 +322,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.36
             Privileged: true
             RequestCpu: "3"
             RequestMemory: "4Gi"
@@ -330,7 +330,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-dev:
-            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.36
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -338,7 +338,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-mongodb:
-            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.36
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -346,7 +346,7 @@ jenkins:
             LimitMemory: "4Gi"
             Tty: true
           Maven-postgresql:
-            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42:0.0.36
             Privileged: true
             RequestCpu: "4"
             RequestMemory: "4Gi"
@@ -389,7 +389,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.36
             Privileged: true
             RequestCpu: "1"
             RequestMemory: "2Gi"
@@ -432,7 +432,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: "${computer.jnlpmac} ${computer.name}"
           Maven:
-            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.35
+            Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java11-firefox42-nodejs10:0.0.36
             Privileged: true
             RequestCpu: "1.5"
             RequestMemory: "4Gi"
