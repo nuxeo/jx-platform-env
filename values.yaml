@@ -439,6 +439,75 @@ jenkins:
             LimitCpu: "3"
             LimitMemory: "6Gi"
             Tty: true
+      Nuxeo-Platform-15:
+        Name: nuxeo-platform-15
+        Label: jenkins-nuxeo-platform-15
+        DevPodPorts: 5005, 8080
+        volumes:
+          - type: Secret
+            secretName: jenkins-maven-settings
+            mountPath: /root/.m2/
+          - type: Secret
+            secretName: jenkins-docker-cfg
+            mountPath: /home/jenkins/.docker
+          - type: Secret
+            secretName: jenkins-release-gpg
+            mountPath: /home/jenkins/.gnupg
+          - type: EmptyDir
+            mountPath: /root/.mvnrepository
+        EnvVars:
+          JENKINS_URL: http://jenkins:8080
+          JAVA_TOOL_OPTIONS: "-Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90"
+          GIT_COMMITTER_EMAIL: platform+jx-bot@nuxeo.com
+          GIT_AUTHOR_EMAIL: platform+jx-bot@nuxeo.com
+          GIT_AUTHOR_NAME: nuxeo-platform-jx-bot
+          GIT_COMMITTER_NAME: nuxeo-platform-jx-bot
+          XDG_CONFIG_HOME: /home/jenkins
+          DOCKER_CONFIG: /home/jenkins/.docker/
+          # lets disable the noisy download artifact logging messages
+          MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+        ServiceAccount: jenkins
+        ImagePullSecret: kubernetes-docker-cfg
+        NodeSelector:
+          team: platform
+        Containers:
+          Jnlp:
+            Image: jenkinsci/jnlp-slave:3.26-1-alpine
+            RequestCpu: "100m"
+            RequestMemory: "128Mi"
+            Args: "${computer.jnlpmac} ${computer.name}"
+          Maven:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java15-firefox42:latest
+            Privileged: true
+            RequestCpu: "3"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
+          Maven-dev:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java15-firefox42:latest
+            Privileged: true
+            RequestCpu: "4"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
+          Maven-mongodb:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java15-firefox42:latest
+            Privileged: true
+            RequestCpu: "4"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
+          Maven-postgresql:
+            Image: $DOCKER_REGISTRY/nuxeo/builder-java15-firefox42:latest
+            Privileged: true
+            RequestCpu: "4"
+            RequestMemory: "4Gi"
+            LimitCpu: "4"
+            LimitMemory: "4Gi"
+            Tty: true
       Nuxeo-Third-Party-RPMs:
         Name: nuxeo-third-party-rpms
         Label: jenkins-nuxeo-third-party-rpms
