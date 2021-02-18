@@ -125,9 +125,9 @@ jenkins:
             Image: $INTERNAL_DOCKER_REGISTRY/nuxeo/builder-java8:latest
             Privileged: true
             RequestCpu: "1"
-            RequestMemory: "512Mi"
+            RequestMemory: "1Gi"
             LimitCpu: "2"
-            LimitMemory: "1Gi"
+            LimitMemory: "2Gi"
             Tty: true
       Nuxeo-Platform-11:
         Name: nuxeo-platform-11
