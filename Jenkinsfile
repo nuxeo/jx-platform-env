@@ -48,7 +48,8 @@ pipeline {
     label 'jenkins-jx-base'
   }
   environment {
-    JX_VERSION = '2.0.1849'
+    JX_VERSION = '2.0.2412'
+    HELM_VERSION = '2.16.6'
     NAMESPACE = getTargetNamespace()
     JENKINS_IMAGE_DOCKER_REGISTRY = "${DOCKER_REGISTRY}"
     INTERNAL_DOCKER_REGISTRY = "docker.${NAMESPACE}.dev.nuxeo.com"
@@ -65,6 +66,20 @@ pipeline {
               usernamePassword(credentialsId: 'packages.nuxeo.com-auth', usernameVariable: 'PACKAGES_USERNAME', passwordVariable: 'PACKAGES_PASSWORD'),
               usernamePassword(credentialsId: 'connect-prod', usernameVariable: 'CONNECT_USERNAME', passwordVariable: 'CONNECT_PASSWORD'),
             ]) {
+              // install a more recent version of Helm 2 for Helm to correctly detect the API version capabilities
+              // of the server in the chart manifests (jenkins and others):
+              // {{- if .Capabilities.APIVersions.Has "apps/v1" }}
+              // apiVersion: apps/v1
+              // {{- else }}
+              // apiVersion: apps/v1beta1
+              // {{- end }}
+              echo 'Current Helm version:'
+              sh 'helm version'
+
+              sh "wget -qO - https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar -xzvf - --strip-components=1 -C /usr/bin linux-amd64/helm"
+              echo 'New Helm version:'
+              sh 'helm version'
+
               echo 'initialize Helm without installing Tiller'
               sh 'helm init --client-only --stable-repo-url=https://charts.helm.sh/stable'
 
