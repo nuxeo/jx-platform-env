@@ -108,6 +108,12 @@ pipeline {
                   --batch-mode
               """
 
+              echo 'disable unwanted gc cron jobs'
+              sh """
+                kubectl --namespace=${NAMESPACE} delete cronjob jenkins-x-gcactivities
+                kubectl --namespace=${NAMESPACE} delete cronjob jenkins-x-gcpods
+              """
+
               // echo 'log jenkins deployment image'
               // sh "kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'"
 
