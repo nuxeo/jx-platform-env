@@ -65,39 +65,50 @@ pipeline {
               usernamePassword(credentialsId: 'packages.nuxeo.com-auth', usernameVariable: 'PACKAGES_USERNAME', passwordVariable: 'PACKAGES_PASSWORD'),
               usernamePassword(credentialsId: 'connect-prod', usernameVariable: 'CONNECT_USERNAME', passwordVariable: 'CONNECT_PASSWORD'),
             ]) {
+              echo 'initialize Helm without installing Tiller'
+              sh 'helm init --client-only --stable-repo-url=https://charts.helm.sh/stable'
+
+              echo 'add local chart repository'
+              sh 'helm repo add jenkins-x http://chartmuseum.jenkins-x.io'
+
+              echo 'replace env vars'
               sh """
-                # initialize Helm without installing Tiller
-                helm init --client-only --stable-repo-url=https://charts.helm.sh/stable
-
-                # add local chart repository
-                helm repo add jenkins-x http://chartmuseum.jenkins-x.io
-
-                # replace env vars
                 envsubst < values.yaml > myvalues.yaml
                 envsubst < templates/docker-service.yaml > templates/docker-service.yaml~gen
+              """
 
-                # create or update Docker Ingress/Service
-                kubectl apply -f templates/docker-service.yaml~gen
+              echo 'create or update Docker Ingress/Service'
+              sh 'kubectl apply -f templates/docker-service.yaml~gen'
 
-                # upgrade Jenkins X
+              echo 'jx version:'
+              sh 'jx version --no-verify=true --no-version-check=true'
+
+              echo 'upgrade Jenkins X Platform'
+              sh """
                 jx upgrade platform --namespace=${NAMESPACE} \
                   --version ${JX_VERSION} \
                   --local-cloud-environment \
                   --always-upgrade \
                   --cleanup-temp-files=true \
                   --batch-mode
+              """
 
-                # log jenkins deployment image
-                kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'
+              echo 'log jenkins deployment image'
+              sh "kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'"
 
-                # patch Jenkins deployment to add Nexus Docker registry pull secret
+              echo 'patch Jenkins deployment to add Nexus Docker registry pull secret'
+              sh """
                 kubectl patch deployment jenkins -n ${NAMESPACE} --patch "\$(cat templates/jenkins-master-deployment-patch.yaml)"
+              """
 
-                # Patch nuxeo-platform-11 PodTemplate XML ConfigMap to define tolerations and allow the pods being
-                # scheduled on a dedicated node pool, see https://jira.nuxeo.com/browse/NXBT-3277.
-                ./scripts/pod-template-toleration-patch.sh
+              echo """
+                Patch pod template XML ConfigMaps to define tolerations and allow the pods being
+                scheduled on a dedicated node pool, see https://jira.nuxeo.com/browse/NXBT-3277.
+              """
+              sh './scripts/pod-template-toleration-patch.sh'
 
-                # restart Jenkins pod
+              echo "restart Jenkins pod"
+              sh """
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
                 kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 1
               """
