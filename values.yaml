@@ -59,9 +59,14 @@ gcactivities:
       - watch
       - delete
 jenkins:
+  enabled: false
+  # TODO
+  # fullnameOverride: jenkins
   Master:
     Image: $JENKINS_IMAGE_DOCKER_REGISTRY/nuxeo/$NAMESPACE-jenkinsx
     ImageTag: 0.0.42
+    # TODO
+    # InstallPlugins: []
   Servers:
     Global:
       EnvVars:

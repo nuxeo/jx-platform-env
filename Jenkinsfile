@@ -108,25 +108,25 @@ pipeline {
                   --batch-mode
               """
 
-              echo 'log jenkins deployment image'
-              sh "kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'"
+              // echo 'log jenkins deployment image'
+              // sh "kubectl get deployments.apps jenkins -n ${NAMESPACE} -oyaml -o'jsonpath={ .spec.template.spec.containers[0].image }'"
 
-              echo 'patch Jenkins deployment to add Nexus Docker registry pull secret'
-              sh """
-                kubectl patch deployment jenkins -n ${NAMESPACE} --patch "\$(cat templates/jenkins-master-deployment-patch.yaml)"
-              """
+              // echo 'patch Jenkins deployment to add Nexus Docker registry pull secret'
+              // sh """
+              //   kubectl patch deployment jenkins -n ${NAMESPACE} --patch "\$(cat templates/jenkins-master-deployment-patch.yaml)"
+              // """
 
-              echo """
-                Patch pod template XML ConfigMaps to define tolerations and allow the pods being
-                scheduled on a dedicated node pool, see https://jira.nuxeo.com/browse/NXBT-3277.
-              """
-              sh './scripts/pod-template-toleration-patch.sh'
+              // echo """
+              //   Patch pod template XML ConfigMaps to define tolerations and allow the pods being
+              //   scheduled on a dedicated node pool, see https://jira.nuxeo.com/browse/NXBT-3277.
+              // """
+              // sh './scripts/pod-template-toleration-patch.sh'
 
-              echo "restart Jenkins pod"
-              sh """
-                kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
-                kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 1
-              """
+              // echo "restart Jenkins pod"
+              // sh """
+              //   kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 0
+              //   kubectl scale deployment jenkins -n ${NAMESPACE} --replicas 1
+              // """
             }
           }
         }
